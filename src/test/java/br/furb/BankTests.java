@@ -1,6 +1,7 @@
 package br.furb;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,26 +36,61 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Bank system tests")
 public class BankTests {
     double numeroContaMock = 12345;
-    Banco banco;
+    double saldoInicialContaMock = 200.20;
+    ContaBancaria contaBancaria;
 
     public BankTests() {
-        this.banco = new Banco();
+        this.contaBancaria = new ContaBancaria();
     }
 
     @Test
     public void criacaoContaTest() {        
-        int numeroContaMock = 12345;
-        double saldoInicialContaMock = 200.20;
-        this.banco.criarConta(numeroContaMock, saldoInicialContaMock);
+        this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
 
-        double saldoContaEspecifica = this.banco.obterSaldoContaPeloNumero(this.numeroContaMock);
-        assertEquals(saldoContaEspecifica, saldoInicialContaMock);
+        double saldoContaEspecifica = this.contaBancaria.obterSaldoConta(this.numeroContaMock);
+        assertEquals(saldoContaEspecifica, this.saldoInicialContaMock);
     }
 
     @Test
     public void consultaSaldoContaTest() {
-        double saldoConta = this.banco.obterSaldoontaPeloNumero(this.numeroContaMock);
+        this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
+        double saldoConta = this.contaBancaria.obterSaldoConta();
 
-        
+        assertEquals(saldoConta, this.contaBancaria.obterSaldoConta());
+    }
+
+    @Test
+    public void depositarValorContaTest() {
+        this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
+        double valorDeposito = 300.00;
+        double saldoOriginalConta = this.contaBancaria.obterSaldoConta();
+
+        double saldoAtual = this.contaBancaria.depositar(valorDeposito);
+
+        assertEquals(saldoAtual, valorDeposito + saldoOriginalConta);
+    }
+
+    @Test
+    public void sacarValorContaTest() {
+        this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
+        double valorSaque = 200.00;
+        double valorOriginalConta = this.contaBancaria.obterSaldoConta();
+
+        double saldoAtual = this.contaBancaria.sacar(valorSaque);
+
+        assertEquals(saldoAtual, valorOriginalConta - valorSaque);
+    }
+
+    @Test
+    public void transferenciaTest() {
+        this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
+        ContaBancaria contaAuxiliar = new ContaBancaria();
+        contaAuxiliar.numeroConta = 45678;
+        contaAuxiliar.saldoInicial = 300.00;
+        double valorTransferencia = 100.00;
+
+        double valorAtualContaOrigem = this.contaBancaria.transferir(contaAuxiliar, valorTransferencia);
+
+        assertEquals(valorAtualContaOrigem, this.contaBancaria.obterSaldoConta() - valorTransferencia);
     }
 }
