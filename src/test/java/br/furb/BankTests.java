@@ -47,7 +47,7 @@ public class BankTests {
     public void criacaoContaTest() {        
         this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
 
-        double saldoContaEspecifica = this.contaBancaria.obterSaldoConta(this.numeroContaMock);
+        double saldoContaEspecifica = this.contaBancaria.obterSaldoConta();
         assertEquals(saldoContaEspecifica, this.saldoInicialContaMock);
     }
 
@@ -56,7 +56,7 @@ public class BankTests {
         this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
         double saldoConta = this.contaBancaria.obterSaldoConta();
 
-        assertEquals(saldoConta, this.contaBancaria.obterSaldoConta());
+        assertEquals(this.saldoInicialContaMock, saldoConta);
     }
 
     @Test
@@ -85,8 +85,8 @@ public class BankTests {
     public void transferenciaTest() {
         this.contaBancaria.criarConta(this.numeroContaMock, this.saldoInicialContaMock);
         ContaBancaria contaAuxiliar = new ContaBancaria();
-        contaAuxiliar.numeroConta = 45678;
-        contaAuxiliar.saldoInicial = 300.00;
+        contaAuxiliar.setNumeroConta(45678);
+        contaAuxiliar.setSaldoInicial(300.00);
         double valorTransferencia = 100.00;
 
         double valorAtualContaOrigem = this.contaBancaria.transferir(contaAuxiliar, valorTransferencia);
